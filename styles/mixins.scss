@@ -1,0 +1,70 @@
+@mixin transFast() {
+    transition: all 0.25s ease-in-out;
+}
+@mixin transMed() {
+    transition: all 0.3s ease-in-out;
+}
+@mixin transSlow() {
+    transition: all 0.4s ease-in-out;
+}
+@mixin flexCenter() {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin smallContainer() {
+    width: min(98%, 440px);
+    margin-inline: auto;
+}
+
+@mixin containerStyle() {
+    background: $color-primary;
+    p,
+    input,
+    button,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    li,
+    a {
+        color: $color-bg;
+    }
+    padding-block: 1em 0.5em;
+    border: 1px solid $color-bg;
+    border-radius: $borderRad;
+}
+@mixin skeleton() {
+    background: $color-primary;
+    // aspect-ratio: 1/1;
+    pointer-events: none;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    &::before {
+        overflow: hidden;
+        content: '';
+        z-index: -1;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
+        filter: blur(1 50px);
+        height: 100%;
+        width: 100%;
+        background-image: linear-gradient(90deg, $color-primary, lighten($color-primary, 5%), rgba(255, 255, 255, 0));
+        animation: shine 2s infinite ease-in-out;
+    }
+}
+
+@keyframes shine {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 200%;
+    }
+}
