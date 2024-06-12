@@ -1,7 +1,7 @@
 import SearchBar from '@/components/SearchBar';
 import SelectedItem from '@/components/SelectedItem';
 
-async function fetchData({ limit, term }: { limit: number; term: string }) {
+async function fetchData({ limit, term }: { limit: string; term: string }) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
         const response = await fetch(`https://api.snowray.app/snowowl/snomedct/SNOMEDCT/concepts?term=${term}&limit=${limit}&expand=pt()`, {
