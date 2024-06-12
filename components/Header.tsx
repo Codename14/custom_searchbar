@@ -8,7 +8,7 @@ export default function Header() {
             <header>
                 <nav className='flex justify-between limit-width p-2'>
                     <h2 className='text-2xl'>Hello</h2>
-                    <Link href='https://github.com/Codename14/custom_searchbar'>
+                    <Link href='https://github.com/Codename14/custom_searchbar' className='icon--primary'>
                         <FaGithub size={40} />
                     </Link>
                 </nav>

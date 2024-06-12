@@ -39,6 +39,9 @@ html {
     @include containerChild();
     margin: 0 auto;
 }
+.icon--primary {
+    @include iconActionStyle();
+}
 
 //---------------------------------------------------------
 //-------------------- SCROLL BALL-------------------------

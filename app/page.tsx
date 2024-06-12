@@ -35,7 +35,7 @@ export default async function Home({ searchParams }: { searchParams: any }) {
 
     return (
         <main className='mt-10 min-h-screen'>
-            <h1 className='text-3xl mb-2'>Search</h1>
+            <h1 className='text-2xl md:text-3xl mb-2 font-semibold'>SNOMED CT Quick Search</h1>
             <SearchBar searchResults={snowData} />
             <SelectedItem searchResults={snowData} />
         </main>

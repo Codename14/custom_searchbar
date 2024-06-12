@@ -74,3 +74,14 @@
         background: rgba($color-bg, 0.75);
     }
 }
+@mixin iconActionStyle() {
+    @include transFast();
+    &:hover svg {
+        fill: rgba($color-primary, 0.9);
+        scale: 1.05;
+    }
+    &:active svg {
+        fill: rgba($color-primary, 1);
+        scale: 1;
+    }
+}
