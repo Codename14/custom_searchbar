@@ -39,3 +39,41 @@ html {
     @include containerChild();
     margin: 0 auto;
 }
+
+//---------------------------------------------------------
+//-------------------- SCROLL BALL-------------------------
+//---------------------------------------------------------
+
+::-webkit-scrollbar {
+    //ez csak a body scrollingra hat
+    width: 0.8em;
+    //ez csak a vertical scrollingra hat
+    height: 0.8em;
+}
+::-webkit-scrollbar-track {
+    background: rgba($color-primary, 0.4);
+    //top and bottom
+    // margin-block: 0.2em;
+    //left and right
+    margin-inline: 5em;
+}
+//
+::-webkit-scrollbar-thumb {
+    border-radius: $borderRad;
+    background: $color-primary;
+}
+
+//firefox support
+//first argument is thumb
+//second is track
+@supports (
+    scrollbar-color: $color-primary,
+    var(
+        --primary,
+    )
+) {
+    * {
+        scrollbar-color: $color-primary, color-mix(in srgb, var(--bg-100) 50%, transparent);
+        scrollbar-width: auto; //thin, auto, none
+    }
+}

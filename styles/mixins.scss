@@ -68,3 +68,9 @@
         left: 200%;
     }
 }
+
+@mixin inverseColorScrollThumb() {
+    &::-webkit-scrollbar-thumb {
+        background: rgba($color-bg, 0.75);
+    }
+}
