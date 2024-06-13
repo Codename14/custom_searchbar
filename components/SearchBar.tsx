@@ -13,7 +13,7 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
     const {
         handleSubmit,
         register,
-        formState: { errors, isSubmitting },
+        formState: { errors },
         watch,
         setValue,
         setError,
@@ -71,7 +71,7 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
                             })}
                             placeholder='Type for search...'
                         />
-                        <button className='search__button' type='submit'>
+                        <button className='search__button' type='submit' disabled={isLoading}>
                             Search
                         </button>
                     </div>

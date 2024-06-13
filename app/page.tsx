@@ -16,7 +16,7 @@ async function fetchData({ limit, term }: searchParamType) {
             throw new Error('Network error: ' + response.statusText);
         }
         const data = await response.json();
-        console.log(JSON.stringify(data, null, 2));
+        // console.log(JSON.stringify(data, null, 2));
 
         return data.items;
     } catch (error) {
