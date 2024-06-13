@@ -42,6 +42,7 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
         }
     };
 
+    //scrolling effect
     useEffect(() => {
         if (activeItemRef.current) {
             activeItemRef.current.scrollIntoView({
@@ -71,9 +72,8 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
         } else if (event.key === 'ArrowUp') {
             newIndex = selectedIndex > -1 ? selectedIndex - 1 : filteredResults.length - 1;
             setSelectedIndex(newIndex);
-        }
-        //setting the value of the input
-        else if (event.key === 'Enter' && selectedIndex >= 0 && filteredResults.length > 0 && selectedIndex < filteredResults.length) {
+        } else if (event.key === 'Enter' && selectedIndex >= 0 && filteredResults.length > 0 && selectedIndex < filteredResults.length) {
+            //setting the value of the input
             if (selectedIndex >= 0) {
                 handleSelect({ result: filteredResults[selectedIndex] });
                 event.preventDefault();
