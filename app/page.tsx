@@ -32,7 +32,7 @@ export default async function Home({ searchParams }: { searchParams: searchParam
         snowData = await fetchData({ limit: searchParams.limit, term: searchParams.term });
     }
 
-    console.log('searchParams', searchParams);
+    // console.log('searchParams', searchParams);
 
     return (
         <main className='mt-10 min-h-screen'>

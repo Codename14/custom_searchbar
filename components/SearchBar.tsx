@@ -1,7 +1,7 @@
 'use client';
 import { useSearchContext } from '@/context/SearchContext';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 
 export default function SearchBar({ searchResults }: { searchResults: SnomedConceptType[] }) {
@@ -10,6 +10,10 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
     const { setSelectedSearchItem } = useSearchContext();
     const [isLoading, setIsLoading] = useState(false);
 
+    const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+    const activeItemRef = useRef<HTMLButtonElement>(null);
+
+    //Form
     const {
         handleSubmit,
         register,
@@ -18,7 +22,6 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
         setValue,
         setError,
     } = useForm({ defaultValues: { term: searchParams.get('') ?? '', limit: searchParams.get('limit') ?? '10' } });
-
     const limitValue = watch('limit');
 
     const onSubmit = async (data: FieldValues) => {
@@ -40,16 +43,56 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
     };
 
     useEffect(() => {
+        if (activeItemRef.current) {
+            activeItemRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+            });
+        }
+    }, [selectedIndex]);
+
+    useEffect(() => {
         setIsLoading(false);
     }, [searchParams]);
 
-    // console.log('searchResults', searchResults);
+    //List keyboard events
+    const handleArrowKeys = (event: any) => {
+        let newIndex: number;
+        //checking if the index is out of bounds
+        if (selectedIndex > filteredResults.length) {
+            setSelectedIndex(0);
+        }
+
+        if (event.key === 'Escape') {
+            event.currentTarget.blur();
+        } else if (event.key === 'ArrowDown') {
+            newIndex = selectedIndex < filteredResults.length - 1 ? selectedIndex + 1 : -1;
+            setSelectedIndex(newIndex);
+        } else if (event.key === 'ArrowUp') {
+            newIndex = selectedIndex > -1 ? selectedIndex - 1 : filteredResults.length - 1;
+            setSelectedIndex(newIndex);
+        }
+        //setting the value of the input
+        else if (event.key === 'Enter' && selectedIndex >= 0 && filteredResults.length > 0 && selectedIndex < filteredResults.length) {
+            if (selectedIndex >= 0) {
+                handleSelect({ result: filteredResults[selectedIndex] });
+                event.preventDefault();
+                event.currentTarget.blur();
+            }
+            setSelectedIndex(-1);
+        }
+    };
+    const handleSelect = ({ result }: { result: SnomedConceptType }) => {
+        setValue('term', result.pt.term), setSelectedSearchItem(result.id);
+    };
 
     const filteredResults = searchResults.filter((result: SnomedConceptType) => result.pt.term.toLowerCase().includes(watch('term').toLowerCase()));
 
     const haveParams = searchParams.get('limit') && searchParams.get('term');
     return (
         <>
+            {/* <p>Selected: {selectedIndex}</p>
+            <p>Length: {filteredResults.length}</p> */}
             <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
                 <div className='flex gap-2 search-limit'>
                     <p>Search Limit</p>
@@ -59,11 +102,9 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
                 <div className={`search-item ${isLoading ? 'loading' : ''}`}>
                     <div className='flex gap-2'>
                         <input
-                            className='search__input'
+                            className={`search__input ${selectedIndex === -1 ? 'selected' : ''}`}
                             onKeyDown={(event) => {
-                                if (event.key === 'Escape') {
-                                    event.currentTarget.blur();
-                                }
+                                handleArrowKeys(event);
                             }}
                             {...register('term', {
                                 required: 'Please enter a search term',
@@ -85,16 +126,13 @@ export default function SearchBar({ searchResults }: { searchResults: SnomedConc
                     {errors.term?.message && <p className='text-red-500 absolute top-1 left-4 backdrop-blur-2xl text-xs'>{errors.term?.message}</p>}
                     {!haveParams && !isLoading && <p className='text-left mt-2 text-sm py-1 px-2  pl-4 '>Press type and enter to search</p>}
                     <ul className='search__result-wrapper'>
-                        {filteredResults.map((result: SnomedConceptType) => (
+                        {filteredResults.map((result: SnomedConceptType, i: number) => (
                             <li key={result.id}>
                                 <button
                                     type='button'
-                                    onClick={() => {
-                                        setValue('term', result.pt.term),
-                                            setSelectedSearchItem(result.id),
-                                            console.log('clicked', result.id, result.pt.term);
-                                    }}
-                                    className='result__item'
+                                    onClick={() => handleSelect({ result })}
+                                    className={`result__item ${selectedIndex === i ? 'selected' : ''}`}
+                                    ref={selectedIndex === i ? activeItemRef : null}
                                 >
                                     {result.pt.term.split(' ').map((word: string, index: number) => {
                                         const match = word.toLowerCase().includes(searchParams.get('term')!.toLowerCase());
