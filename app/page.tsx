@@ -1,7 +1,7 @@
 import SearchBar from '@/components/SearchBar';
 import SelectedItem from '@/components/SelectedItem';
 
-async function fetchData({ limit, term }: { limit: string; term: string }) {
+async function fetchData({ limit, term }: searchParamType) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     try {
         const response = await fetch(`https://api.snowray.app/snowowl/snomedct/SNOMEDCT/concepts?term=${term}&limit=${limit}&expand=pt()`, {
@@ -15,9 +15,8 @@ async function fetchData({ limit, term }: { limit: string; term: string }) {
         if (!response.ok) {
             throw new Error('Network error: ' + response.statusText);
         }
-
         const data = await response.json();
-        // console.log(JSON.stringify(data, null, 2));
+        console.log(JSON.stringify(data, null, 2));
 
         return data.items;
     } catch (error) {
@@ -25,13 +24,15 @@ async function fetchData({ limit, term }: { limit: string; term: string }) {
     }
 }
 
-export default async function Home({ searchParams }: { searchParams: any }) {
+export default async function Home({ searchParams }: { searchParams: searchParamType }) {
     let snowData;
     if (!searchParams.limit || !searchParams.term) {
         snowData = [];
     } else {
         snowData = await fetchData({ limit: searchParams.limit, term: searchParams.term });
     }
+
+    console.log('searchParams', searchParams);
 
     return (
         <main className='mt-10 min-h-screen'>

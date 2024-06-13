@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 
-export default function SearchBar({ searchResults }: { searchResults: any }) {
+export default function SearchBar({ searchResults }: { searchResults: SnomedConceptType[] }) {
     const searchParams = useSearchParams();
     const router = useRouter();
     const { setSelectedSearchItem } = useSearchContext();
@@ -45,7 +45,7 @@ export default function SearchBar({ searchResults }: { searchResults: any }) {
 
     // console.log('searchResults', searchResults);
 
-    const filteredResults = searchResults.filter((result: any) => result.pt.term.toLowerCase().includes(watch('term').toLowerCase()));
+    const filteredResults = searchResults.filter((result: SnomedConceptType) => result.pt.term.toLowerCase().includes(watch('term').toLowerCase()));
 
     const haveParams = searchParams.get('limit') && searchParams.get('term');
     return (
@@ -85,7 +85,7 @@ export default function SearchBar({ searchResults }: { searchResults: any }) {
                     {errors.term?.message && <p className='text-red-500 absolute top-1 left-4 backdrop-blur-2xl text-xs'>{errors.term?.message}</p>}
                     {!haveParams && !isLoading && <p className='text-left mt-2 text-sm py-1 px-2  pl-4 '>Press type and enter to search</p>}
                     <ul className='search__result-wrapper'>
-                        {filteredResults.map((result: any) => (
+                        {filteredResults.map((result: SnomedConceptType) => (
                             <li key={result.id}>
                                 <button
                                     type='button'

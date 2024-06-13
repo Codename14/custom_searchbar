@@ -2,11 +2,11 @@
 
 import { useSearchContext } from '@/context/SearchContext';
 
-export default function SelectedItem({ searchResults }: { searchResults: any }) {
+export default function SelectedItem({ searchResults }: { searchResults: SnomedConceptType[] }) {
     const { selectedSearchItem } = useSearchContext();
     // console.log('searchResults', searchResults);
 
-    const result = searchResults?.find((result: any) => result.id === selectedSearchItem);
+    const result = searchResults?.find((result: SnomedConceptType) => result.id === selectedSearchItem);
     return (
         <>
             {result && (
